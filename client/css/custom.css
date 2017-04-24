@@ -1,0 +1,6 @@
+textarea {
+    font-family: 'Menlo', 'Courier New', 'Courier';
+    width: 100%;
+    margin: 4px 0px 4px 0px;
+    resize: none;
+}

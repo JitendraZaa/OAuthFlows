@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+      Salesforce OAuth Flow examples
+    </title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon"  type="image/icon"  href="Cloud Red.ico" />
+  </head>
+  <body>
+
+    <nav role="navigation" class="navbar navbar-default">
+      <div class="container-fluid">
+
+        <div class="navbar-header">
+          <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" class="navbar-toggle">
+            <span class="sr-only">
+              Toggle navigation
+            </span>
+            <span class="icon-bar">
+            </span>
+            <span class="icon-bar">
+            </span>
+            <span class="icon-bar">
+            </span>
+          </button>
+          <a href="http://JitendraZaa.com/blog" class="navbar-brand">
+           <span class="glyphicon glyphicon-cloud" style="vertical-align : middle" ></span> Salesforce OAuth Flow examples
+          </a>
+		  
+        </div> 
+		
+		
+		  
+		<ul class="nav navbar-nav navbar-right">
+            <li>  <a href="javascript:void(0)"  >
+                    <span class="glyphicon glyphicon-user"></span>  <span id="loggedInUser"> </span>  
+                  </a>      
+            </li>
+          </ul>
+		  
+		  <ul class="nav navbar-nav navbar-right">
+            <li>  <a href="javascript:void(0)"  >
+                    <span class="glyphicon glyphicon-cloud-upload"></span> 
+					<span class="headingText"> API Count </span>
+					<span id="apiCount" class="headingText">0</span>  
+                  </a>      
+            </li>
+          </ul>
+
+		  <ul class="nav navbar-nav navbar-right">
+            <li>  
+				<a href="index.html" class="navbar-brand">
+					<span class="glyphicon glyphicon-home headingText" style="vertical-align : middle" ></span> 
+					<span class="headingText">Home</span>
+				</a>     
+            </li>
+          </ul> 
+       
+      </div>
+    </nav> 
+
+	<div id="body"> 
+		 
+		<div class="form-group">
+		  <label class="col-md-2 control-label" for="Query to execute">Query to execute</label>  
+		  <div class="col-md-8">
+		  <input id="Query-to-execute" name="Query-to-execute" type="text" placeholder="Select Id, Name From Account" 
+		  class="form-control input-md" value="Select Id, Name From Account LIMIT 10" >
+		  </input> 
+		  </div>
+		</div> 
+		
+		<p class="info">Press enter to execute query</p> 
+		<pre id="result">
+			
+		</pre>
+	</div>
+  
+         
+  </body> 
+	<script type="text/javascript" src="lib/jquery.js">  </script>
+	<script type="text/javascript" src="lib/jqueryCookies.js"> </script>  
+	<script type="text/javascript" src="lib/forcetk.js">   </script> 
+	<script type="text/javascript" src="js/Main.js">   </script> 
+<style>
+	#result{
+		margin-left : 15px;
+		margin-right : 15px;
+		margin-top : 30px;
+	}
+	.info{
+		display: block;
+		clear: both;
+		padding-left: 20%;
+		font-style: italic;
+		color: #888;
+		font-size: 1.2rem;
+	}
+	.headingText{font-size: 1.2rem;}
+</style>
+ 
+</html> 

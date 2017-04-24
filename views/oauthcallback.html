@@ -1,0 +1,56 @@
+<html>
+<body> 
+	<h1> Extracting token...</h1> <p></p>
+	<h2 id="h2Message"></h2>
+	<script type="text/javascript" src="lib/jquery.js"></script>
+    <script type="text/javascript" src="lib/jqueryCookies.js"></script> 
+	<script type="text/javascript" src="lib/forcetk.js">   </script>	 
+	
+<script>
+
+function getURLParam(name){
+		var results = new RegExp('[\?&]' + name + '=([^]*)').exec(window.location.href);
+		if (results==null){
+		   return null;
+		}
+		else{
+		   return results[1] || 0;
+		}
+	} 
+
+if (window.location.hash) {
+	var apiVersion = 'v38.0';
+	
+    var message = decodeURIComponent(window.location.hash.substr(1)),
+        params = message.split('&'),
+        response = {};
+    params.forEach(function (param) {
+        var splitter = param.split('=');
+        response[splitter[0]] = splitter[1];
+    });
+	
+    if (response && response.access_token) {  
+        $.cookie("AccToken",response.access_token ) ;
+        $.cookie("APIVer", apiVersion) ;
+        $.cookie("InstURL",  response.instance_url) ; 
+        $.cookie("idURL",  response.id) ;
+        
+		strngBrks = response.id.split('/');
+		$.cookie("LoggeduserId",  strngBrks[strngBrks.length - 1]) ;
+		
+        window.location = 'Main';
+    } else {
+        $("#h2Message").html("AuthenticationError: No Token");
+    }
+	
+}else if (getURLParam('code')) {
+	var access_code = getURLParam('code') ;
+	$.cookie("AccToken",access_code ) ;
+	window.location = 'Main'; 
+}else{
+	$("#h2Message").html("No access token in query string"); 
+}
+ 
+</script>
+</body>
+</html>

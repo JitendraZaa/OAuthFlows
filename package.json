@@ -1,0 +1,36 @@
+{
+  "name": "Salesfore_OAuthDemo_JWT",
+  "version": "0.0.1",
+  "description": "Salesforce JWT OAuth Demo",
+  "main": "Server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "Node.Js",
+    "Lightnig Component",
+    "Lightnig Out",
+    "API",
+    "Salesforce"
+  ],
+  "author": "Jitendra Zaa",
+  "license": "MIT",
+  "dependencies": {
+    "atlassian-jwt": "^0.1.4",
+    "base64-url": "^1.3.3",
+    "body-parser": "~1.6.2", 
+    "express": "~4.7.1",
+    "http": "~0.0.0", 
+    "morgan": "^1.8.1",
+    "njwt": "^0.4.0",
+    "path": "^0.12.7",
+    "request": "~2.36.0" 
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
+}

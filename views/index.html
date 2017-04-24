@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Login to Salesforce </title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon"  type="image/icon"  href="Cloud Red.ico" />
+  </head>
+  <body class="container" style="padding-top: 50px;">
+    <div class="jumbotron">
+      <h1>Login to Salesforce</h1>
+
+		<p>
+          <table  style="width:100%">
+            <tr>
+                <td  style="width:80%"> 
+                    <b> Salesforce and NodeJs Boiler plate </b> <br />
+                    To Start using, Select your Salesforce instance <br />
+                    By <a href="http://JitendraZaa.com/blog">Jitendra Zaa
+</a>  
+                </td> 
+                <td style="width:20%">
+                    <img src="Salesforce.png" />
+                </td>
+            </tr>
+          </table>  
+      </p>  
+    </div>
+	
+	<div class="jumbotron">
+		<p>
+		 <h2>If you are using First time - <i> User Agent OAuth Flow </i> </h2>
+		  <a id="prodBtn" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
+		  <a id="sandBtn" role="button" class="btn btn-primary btn-lg">Sandbox</a>
+	  </p>
+	</div>	
+	
+	<div class="jumbotron">
+		<p>
+		 <h2>For returning users - <i> JWT OAuth Flow </i></h2>
+		 <p><i class="note">Note : Before using JWT flow, make sure your <b><u> username </u></b> has already validated connected app using some other flow, like User Agent flow. <a href="https://jwt.io/"> Use this tool to debug JSON token generated in Node.js application. </a> </i></p>
+		 <div class="form-group">
+			<label for="jwtUserName">Username to be used for JWT</label>
+			<input class="form-control" id="jwtUserName" type="text" value="ilovenagpur@gmail.com" />
+		  </div>
+  
+		  <a id="prodBtnR" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
+		  <a id="sandBtnR" role="button" class="btn btn-primary btn-lg">Sandbox</a>
+	  </p>
+	</div>	
+
+    <script type="text/javascript" src="lib/jquery.js"></script> 
+	<script type="text/javascript" src="lib/jqueryCookies.js"> </script>  
+	
+	<script>  
+	
+	function clearAllCookies(){
+		$.cookie("AccToken",'') ;
+        $.cookie("APIVer", '') ;
+        $.cookie("InstURL",  '') ; 
+        $.cookie("idURL",  '') ; 
+		$.cookie("LoggeduserId",  '') ;
+	}
+	clearAllCookies();
+	
+	 $( "#prodBtn" ).click(function() {
+	  window.location = 'jwtF?isSandbox=false';
+	});
+	$( "#sandBtn" ).click(function() {
+	  window.location = 'jwtF?isSandbox=true';
+	}); 
+	
+	$( "#prodBtnR" ).click(function() {
+	  window.location = 'jwt?isSandbox=false&jwtUserName='+$("#jwtUserName").val();
+	});
+	$( "#sandBtnR" ).click(function() {
+	  window.location = 'jwt?isSandbox=true&jwtUserName='+$("#jwtUserName").val();
+	}); 
+	 
+	    
+    </script>
+	<style>
+		.note{
+			font-size:1.5rem;
+		}
+		.form-control {
+			width : 40%;
+		}
+	</style>
+  </body>
+</html>
