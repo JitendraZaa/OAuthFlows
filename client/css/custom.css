@@ -4,3 +4,12 @@ textarea {
     margin: 4px 0px 4px 0px;
     resize: none;
 }
+.smallFont{
+    font-size: 0.8em;
+} 
+.note{
+    font-size:1.5rem;
+}
+.form-control {
+    width : 40%;
+}

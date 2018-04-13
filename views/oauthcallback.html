@@ -23,33 +23,42 @@ if (window.location.hash) {
 	
     var message = decodeURIComponent(window.location.hash.substr(1)),
         params = message.split('&'),
-        response = {};
+		response = {};
+		
     params.forEach(function (param) {
         var splitter = param.split('=');
         response[splitter[0]] = splitter[1];
     });
-	
-    if (response && response.access_token) {  
+	 
+	 if (response && response.access_token) {  
         $.cookie("AccToken",response.access_token ) ;
         $.cookie("APIVer", apiVersion) ;
         $.cookie("InstURL",  response.instance_url) ; 
         $.cookie("idURL",  response.id) ;
         
 		strngBrks = response.id.split('/');
-		$.cookie("LoggeduserId",  strngBrks[strngBrks.length - 1]) ;
-		
+		$.cookie("LoggeduserId",  strngBrks[strngBrks.length - 1]) ; 
         window.location = 'Main';
     } else {
         $("#h2Message").html("AuthenticationError: No Token");
     }
-	
+	 
 }else if (getURLParam('code')) {
 	var access_code = getURLParam('code') ;
-	$.cookie("AccToken",access_code ) ;
-	window.location = 'Main'; 
+	var state = getURLParam('state') ;
+	if(state.includes('webServer')){
+		//Its webserver flow so extract Token
+		$("#h2Message").html('I am Webserver Flow');
+		window.location = 'webServerStep2?code='+access_code+'&state='+state;
+	}else{
+		$.cookie("AccToken",access_code ) ;
+		window.location = 'Main';
+	} 
+	 
 }else{
 	$("#h2Message").html("No access token in query string"); 
 }
+  
  
 </script>
 </body>

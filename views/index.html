@@ -2,20 +2,21 @@
 <html lang="en">
   <head>
     <title>Login to Salesforce </title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/custom.css" rel="stylesheet">
     <link rel="icon"  type="image/icon"  href="Cloud Red.ico" />
   </head>
   <body class="container" style="padding-top: 50px;">
     <div class="jumbotron">
-      <h1>Login to Salesforce</h1>
+      <h1>Source Code - Salesforce OAuth Flows</h1>
 
 		<p>
           <table  style="width:100%">
             <tr>
                 <td  style="width:80%"> 
-                    <b> Salesforce and NodeJs Boiler plate </b> <br />
+                    <b> Salesforce and NodeJs Boiler plate with OAuth Flows</b> <br />
                     To Start using, Select your Salesforce instance <br />
-                    By <a href="http://JitendraZaa.com/blog">Jitendra Zaa
+                    By <a href="https://JitendraZaa.com/blog">Jitendra Zaa
 </a>  
                 </td> 
                 <td style="width:20%">
@@ -28,16 +29,53 @@
 	
 	<div class="jumbotron">
 		<p>
-		 <h2>If you are using First time - <i> User Agent OAuth Flow </i> </h2>
+		 <h2> User Agent Flow</h2> 
+		 
+		 <ol class="smallFont">
+			 <li> This page (Index.html) </li>
+			 <li> Salesforce  <b>authorize</b> URL, response type <b>token</b> </li>
+			 <li> oauthCallback.html  </li>
+			 <li> Main.html (Salesforce Query operations)  </li>
+		 </ol> 
+ 
 		  <a id="prodBtn" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
 		  <a id="sandBtn" role="button" class="btn btn-primary btn-lg">Sandbox</a>
 	  </p>
 	</div>	
+
+	<div class="jumbotron">
+		<p>
+		 <h2>Web Server Flow </h2> 
+		 <ol class="smallFont">
+			 <li> This page (Index.html) </li>
+			 <li> Salesforce  <b>authorize</b> URL, response type <b>code</b>  </li>
+			 <li> oauthCallback.html</li>
+			 <li> Salesforce <b>token</b> URL, grant_type <b>authorization_code</b>  </li>
+			 <li>Main.html (Salesforce Query operations) </li>
+		 </ol>  
+		  <a id="prodBtnWS" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
+		  <a id="sandBtnWS" role="button" class="btn btn-primary btn-lg">Sandbox</a>
+	  </p>
+	</div> 
+
 	
 	<div class="jumbotron">
 		<p>
-		 <h2>For returning users - <i> JWT OAuth Flow </i></h2>
-		 <p><i class="note">Note : Before using JWT flow, make sure your <b><u> username </u></b> has already validated connected app using some other flow, like User Agent flow. <a href="https://jwt.io/"> Use this tool to debug JSON token generated in Node.js application. </a> </i></p>
+		 <h2> JWT OAuth Flow </h2>
+
+		 <p><i class="note"> <a href="https://jwt.io/"> Use this tool to debug JSON token generated in Node.js application. </a> </i></p>
+		 
+		 <ol class="smallFont">
+			 <li>Validate connected app by using any other connected App</li>
+			 <li>Provide username by which app already validated</li>
+			 <li></li>
+			 <li></li>
+			 <li></li>
+			 <li></li>
+		 </ol>
+
+
+		 
 		 <div class="form-group">
 			<label for="jwtUserName">Username to be used for JWT</label>
 			<input class="form-control" id="jwtUserName" type="text" value="ilovenagpur@gmail.com" />
@@ -63,28 +101,27 @@
 	clearAllCookies();
 	
 	 $( "#prodBtn" ).click(function() {
-	  window.location = 'jwtF?isSandbox=false';
+	  window.location = 'uAgent?isSandbox=false';
 	});
 	$( "#sandBtn" ).click(function() {
-	  window.location = 'jwtF?isSandbox=true';
+	  window.location = 'uAgent?isSandbox=true';
 	}); 
 	
+	$( "#prodBtnWS" ).click(function() {
+	  window.location = 'webServer?isSandbox=false';
+	});
+	$( "#sandBtnWS" ).click(function() {
+	  window.location = 'webServer?isSandbox=true';
+	}); 
+
 	$( "#prodBtnR" ).click(function() {
 	  window.location = 'jwt?isSandbox=false&jwtUserName='+$("#jwtUserName").val();
 	});
 	$( "#sandBtnR" ).click(function() {
 	  window.location = 'jwt?isSandbox=true&jwtUserName='+$("#jwtUserName").val();
 	}); 
-	 
-	    
+	  
     </script>
-	<style>
-		.note{
-			font-size:1.5rem;
-		}
-		.form-control {
-			width : 40%;
-		}
-	</style>
+ 
   </body>
 </html>
