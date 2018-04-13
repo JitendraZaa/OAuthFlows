@@ -1,127 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Login to Salesforce </title>
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="css/custom.css" rel="stylesheet">
-    <link rel="icon"  type="image/icon"  href="Cloud Red.ico" />
-  </head>
-  <body class="container" style="padding-top: 50px;">
-    <div class="jumbotron">
-      <h1>Source Code - Salesforce OAuth Flows</h1>
+
+<head>
+	<title>Login to Salesforce </title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/custom.css" rel="stylesheet">
+	<link rel="icon" type="image/icon" href="Cloud Red.ico" />
+</head>
+
+<body class="container" style="padding-top: 50px;">
+
+	<nav role="navigation" class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="#divHome">Home</a>
+					</li>
+					<li>
+						<a href="#userAgentFlow"> UserAgent </a>
+					</li>
+					<li>
+						<a href="#webServer"> Web Server </a>
+					</li>
+					<li>
+						<a href="#jwt"> JWT </a>
+					</li>
+					<li>
+						<a href="#usernamePassword"> Username Password</a>
+					</li>
+					<li><a href="#deviceFlow"> Device Authentication Flow </a></li>
+					<li><a href="#refreshToken">Refresh Token</a></li>
+					<li><a href="#samlAssertion"> SAML Assertion </a></li>
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+
+	<div class="jumbotron" Id="divHome">
+		<h1>Source Code - Salesforce OAuth Flows</h1>
 
 		<p>
-          <table  style="width:100%">
-            <tr>
-                <td  style="width:80%"> 
-                    <b> Salesforce and NodeJs Boiler plate with OAuth Flows</b> <br />
-                    To Start using, Select your Salesforce instance <br />
-                    By <a href="https://JitendraZaa.com/blog">Jitendra Zaa
-</a>  
-                </td> 
-                <td style="width:20%">
-                    <img src="Salesforce.png" />
-                </td>
-            </tr>
-          </table>  
-      </p>  
-    </div>
+			<table style="width:100%">
+				<tr>
+					<td style="width:80%">
+						<b> Salesforce and NodeJs Boiler plate with OAuth Flows</b> 
+						<br /> By
+						<a href="https://JitendraZaa.com/blog">
+							Jitendra Zaa
+						</a>
+					</td>
+					<td style="width:20%">
+						<img src="Salesforce.png" />
+					</td>
+				</tr>
+			</table>
+		</p>
+
+		<p>
+			<b>Tips : </b> 
+			<ol>
+				<li>If the user is never redirected to login at Salesforce in flows like JWT or Username password, the user can’t directly authorize the application, so no refresh tokens can be used. If your application requires refresh tokens, you should consider using the Web server or <a href="https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_username_password_oauth_flow.htm">user-agent OAuth flow</a> or Device Authentication Flow	.</li>
+			</ol>
+		</p>
+	</div>
+
+	<div class="jumbotron" id="userAgentFlow">
+		<p>
+			<h2> User Agent Flow</h2>
+
+			<ol class="smallFont">
+				<li> This page (Index.html) </li>
+				<li> Salesforce
+					<b>authorize</b> URL, response type
+					<b>token</b>
+				</li>
+				<li> oauthCallback.html </li>
+				<li> Main.html (Salesforce Query operations) </li>
+			</ol>
+
+			<a id="prodBtn" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
+			<a id="sandBtn" role="button" class="btn btn-primary btn-lg">Sandbox</a>
+		</p>
+	</div>
+
+	<div class="jumbotron" id="webServer">
+		<p>
+			<h2>Web Server Flow </h2>
+			<ol class="smallFont">
+				<li> This page (Index.html) </li>
+				<li> Salesforce
+					<b>authorize</b> URL, response type
+					<b>code</b>
+				</li>
+				<li> oauthCallback.html</li>
+				<li> Salesforce
+					<b>token</b> URL, grant_type
+					<b>authorization_code</b>, POST request </li>
+				<li>Main.html (Salesforce Query operations) </li>
+			</ol>
+			<a id="prodBtnWS" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
+			<a id="sandBtnWS" role="button" class="btn btn-primary btn-lg">Sandbox</a>
+		</p>
+	</div>
+
+
+	<div class="jumbotron" id="jwt">
+		<p>
+			<h2> JWT OAuth Flow </h2>
+
+			<p>
+				<i class="note">
+					<a href="https://jwt.io/"> Use this tool to debug JSON token generated in Node.js application. </a>
+				</i>
+			</p>
+
+			<ol class="smallFont">
+				<li> This page (Index.html) </li>
+				<li> Salesforce
+					<b>token</b> URL, grant type
+					<b>jwt-bearer</b> , POST request </li>
+				<li> Main.html (Salesforce Query operations) </li>
+			</ol>
+
+
+
+			<div class="form-group">
+				<label for="jwtUserName">Salesforce username previously validated Connected App </label>
+				<input class="form-control" id="jwtUserName" type="text" value="ilovenagpur@gmail.com" />
+			</div>
+
+			<a id="prodBtnR" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
+			<a id="sandBtnR" role="button" class="btn btn-primary btn-lg">Sandbox</a>
+		</p>
+
+
+	</div>
+
+	<div class="jumbotron" id="usernamePassword">
+		<p>
+			<h2>Username - Password OAuth Flow </h2>
+
+			<ol class="smallFont">
+				<li> This page (Index.html) </li>
+				<li> Salesforce
+					<b>token</b> URL, grant type
+					<b>password</b> , POST request </li>
+				<li> Main.html (Salesforce Query operations) </li>
+			</ol>
+
+			<form action="/uPwd" method="POST" name="usernamepasswordFlow">
+				<div class="form-group">
+					<label for="sfdcUsername">Salesforce Username </label>
+					<input class="form-control" name="sfdcUsername"  id="sfdcUsername" type="text" value="ilovenagpur@gmail.com" />
+
+					<label for="sfdcPassword">Salesforce Password </label>
+					<input class="form-control"  name="sfdcPassword" id="sfdcPassword" type="password" value="" />
+					<br>
+					<button class="btn btn-primary btn-lg" type="submit" name="instance" value="prod">Production</button>
+					<button class="btn btn-primary btn-lg" type="submit" name="instance" value="sand">Sandbox</button>
+				</div>
+			</form>
+		</p>  
+	</div>
+
+	<div class="jumbotron" id="deviceFlow">
+			<p>
+				<h2> Device Authentication Flow</h2>
 	
-	<div class="jumbotron">
-		<p>
-		 <h2> User Agent Flow</h2> 
-		 
-		 <ol class="smallFont">
-			 <li> This page (Index.html) </li>
-			 <li> Salesforce  <b>authorize</b> URL, response type <b>token</b> </li>
-			 <li> oauthCallback.html  </li>
-			 <li> Main.html (Salesforce Query operations)  </li>
-		 </ol> 
- 
-		  <a id="prodBtn" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
-		  <a id="sandBtn" role="button" class="btn btn-primary btn-lg">Sandbox</a>
-	  </p>
-	</div>	
-
-	<div class="jumbotron">
-		<p>
-		 <h2>Web Server Flow </h2> 
-		 <ol class="smallFont">
-			 <li> This page (Index.html) </li>
-			 <li> Salesforce  <b>authorize</b> URL, response type <b>code</b>  </li>
-			 <li> oauthCallback.html</li>
-			 <li> Salesforce <b>token</b> URL, grant_type <b>authorization_code</b>  </li>
-			 <li>Main.html (Salesforce Query operations) </li>
-		 </ol>  
-		  <a id="prodBtnWS" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
-		  <a id="sandBtnWS" role="button" class="btn btn-primary btn-lg">Sandbox</a>
-	  </p>
-	</div> 
-
+				<ol class="smallFont">
+					<li> Make sure Device Authentication flow is enabled in Connected App</li>
+					<li> This page (Index.html) </li>
+					<li> Salesforce
+						<b>token</b> URL, response type
+						<b>device_code, POST request</b>
+					</li>
+					<li>Validate device by navigating URL and providing code</li>
+					<li>Meanwhile, keep polling <b>token</b> URL with device code and grant type <b>device</b></li> 
+					<li>extract <b>access_token</b></li>
+					<li> Main.html (Salesforce Query operations) </li>
+				</ol>
 	
-	<div class="jumbotron">
+				<a id="prodBtnDvc" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
+				<a id="sandBtnDvc" role="button" class="btn btn-primary btn-lg">Sandbox</a>
+			</p>
+		</div>
+
+	<div class="jumbotron" id="refreshToken">
 		<p>
-		 <h2> JWT OAuth Flow </h2>
+			<h2>Refresh Token Flow</h2>
+			<p><i><b> To be Implemented </b>	</i></p>
+			Refresh Token flow can only be implemented for OAuth which asks users confirmation to validate connected app like Web Server flow and User Agent Flow 
+		</p>
+	</div>
 
-		 <p><i class="note"> <a href="https://jwt.io/"> Use this tool to debug JSON token generated in Node.js application. </a> </i></p>
-		 
-		 <ol class="smallFont">
-			 <li>Validate connected app by using any other connected App</li>
-			 <li>Provide username by which app already validated</li>
-			 <li></li>
-			 <li></li>
-			 <li></li>
-			 <li></li>
-		 </ol>
+	<div class="jumbotron" id="samlAssertion">
+			<p>
+				<h2>SAML Assertion Flow </h2>
+				<p><i><b> To be Implemented </b>	</i></p>   
+			</p>
+		</div>
 
 
-		 
-		 <div class="form-group">
-			<label for="jwtUserName">Username to be used for JWT</label>
-			<input class="form-control" id="jwtUserName" type="text" value="ilovenagpur@gmail.com" />
-		  </div>
-  
-		  <a id="prodBtnR" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
-		  <a id="sandBtnR" role="button" class="btn btn-primary btn-lg">Sandbox</a>
-	  </p>
-	</div>	
+	<script type="text/javascript" src="lib/jquery.js"></script>
+	<script type="text/javascript" src="lib/jqueryCookies.js"> </script>
 
-    <script type="text/javascript" src="lib/jquery.js"></script> 
-	<script type="text/javascript" src="lib/jqueryCookies.js"> </script>  
-	
 	<script>  
-	
-	function clearAllCookies(){
-		$.cookie("AccToken",'') ;
-        $.cookie("APIVer", '') ;
-        $.cookie("InstURL",  '') ; 
-        $.cookie("idURL",  '') ; 
-		$.cookie("LoggeduserId",  '') ;
-	}
-	clearAllCookies();
-	
-	 $( "#prodBtn" ).click(function() {
-	  window.location = 'uAgent?isSandbox=false';
-	});
-	$( "#sandBtn" ).click(function() {
-	  window.location = 'uAgent?isSandbox=true';
-	}); 
-	
-	$( "#prodBtnWS" ).click(function() {
-	  window.location = 'webServer?isSandbox=false';
-	});
-	$( "#sandBtnWS" ).click(function() {
-	  window.location = 'webServer?isSandbox=true';
-	}); 
 
-	$( "#prodBtnR" ).click(function() {
-	  window.location = 'jwt?isSandbox=false&jwtUserName='+$("#jwtUserName").val();
-	});
-	$( "#sandBtnR" ).click(function() {
-	  window.location = 'jwt?isSandbox=true&jwtUserName='+$("#jwtUserName").val();
-	}); 
-	  
-    </script>
- 
-  </body>
+		function clearAllCookies() {
+			$.cookie("AccToken", '');
+			$.cookie("APIVer", '');
+			$.cookie("InstURL", '');
+			$.cookie("idURL", '');
+			$.cookie("LoggeduserId", '');
+		}
+		clearAllCookies();
+
+		$("#prodBtn").click(function () {
+			window.location = 'uAgent?isSandbox=false';
+		});
+		$("#sandBtn").click(function () {
+			window.location = 'uAgent?isSandbox=true';
+		});
+
+		$("#prodBtnDvc").click(function () {
+			window.location = 'device?isSandbox=false';
+		});
+		$("#sandBtnDvc").click(function () {
+			window.location = 'device?isSandbox=true';
+		});
+
+		$("#prodBtnWS").click(function () {
+			window.location = 'webServer?isSandbox=false';
+		});
+		$("#sandBtnWS").click(function () {
+			window.location = 'webServer?isSandbox=true';
+		});
+
+		$("#prodBtnR").click(function () {
+			window.location = 'jwt?isSandbox=false&jwtUserName=' + $("#jwtUserName").val();
+		});
+		$("#sandBtnR").click(function () {
+			window.location = 'jwt?isSandbox=true&jwtUserName=' + $("#jwtUserName").val();
+		});
+
+	</script>
+
+</body>
+
 </html>

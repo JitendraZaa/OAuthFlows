@@ -16,11 +16,14 @@ var express = require('express'),
 	jwt_aud = 'https://login.salesforce.com', 
 	callbackURL='https://localhost:8081/oauthcallback.html';
 
-   
+ 
+	app.set('view engine', 'ejs');
+
 app.use(express.static(__dirname + '/client')); 
  
 app.use(morgan('dev'));
 app.use(bodyParser.json());  
+app.use(bodyParser.urlencoded({extended : true}));
 
 app.set('port', process.env.PORT || 8080);
 
@@ -41,8 +44,8 @@ function extractAccessToken(err, remoteResponse, remoteBody,res){
 		  'Set-Cookie': ['AccToken='+sfdcResponse.access_token,'APIVer='+apiVersion,'InstURL='+sfdcResponse.instance_url,'idURL='+sfdcResponse.id]
 		});
 	}else{
-		res.write('Some error occurred. Make sure connected app is approved previously. ');
-		res.write('Salesforce Response : ');
+		res.write('Some error occurred. Make sure connected app is approved previously if its JWT flow, Username and Password is correct if its Password flow. ');
+		res.write(' Salesforce Response : ');
 		res.write( remoteBody ); 
 	} 
 	res.end();
@@ -124,7 +127,7 @@ app.get('/webServerStep2', function (req,res){
 
 
 /**
-*	 User Agent flow oAuth Flow
+*	 User Agent oAuth Flow
 */
 app.get('/uAgent', function (req,res){  
 	var isSandbox = req.query.isSandbox;
@@ -138,6 +141,129 @@ app.get('/uAgent', function (req,res){
 			}).pipe(res); 
 	 
 } );
+
+/**
+*	 Username Password oAuth Flow
+*/
+app.post('/uPwd', function (req,res){  
+
+	var instance = req.body.instance;
+	var uname = req.body.sfdcUsername;
+	var pwd = req.body.sfdcPassword; 
+
+	var state = req.query.state;
+	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
+	if(instance == 'sand'){
+		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
+	}
+	
+	var computedURL = sfdcURL+
+	'?client_id='+ jwt_consumer_key+
+	 '&grant_type=password'+
+	 '&client_secret='+consumer_secret+
+	 '&username='+uname+
+	 '&password='+pwd ;
+ 
+
+	 request({ 	url : computedURL,  
+				method:'POST' 
+			},
+			function(err, remoteResponse, remoteBody) {
+				extractAccessToken(err, remoteResponse, remoteBody, res); 
+			} 
+		);  
+} );
+
+/**
+ * Device Authentication Flow
+ */
+app.get('/device', function (req,res){  
+
+	var isSandbox = req.query.isSandbox;
+	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
+	if(isSandbox == 'true'){
+		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
+	}
+	
+	var computedURL = sfdcURL+
+	'?client_id='+ jwt_consumer_key+
+	 '&response_type=device_code' ;
+ 
+
+	 request({ 	url : computedURL,  
+				method:'POST' 
+			},
+			function(err, remoteResponse, remoteBody) {
+				if (err) { 
+					res.write(err);
+					res.end();
+					//return res.status(500).end('Error'); 
+					return  ;
+				}
+				console.log(remoteBody) ;
+				var sfdcResponse = JSON.parse(remoteBody); 
+
+				if(sfdcResponse.verification_uri){
+					res.render('deviceOAuth',{
+						verification_uri : sfdcResponse.verification_uri,
+						user_code : sfdcResponse.user_code,
+						device_code : sfdcResponse.device_code,
+						isSandbox : isSandbox
+					}); 
+				}  
+			} 
+		);  
+} ); 
+
+/**
+ *  Keep polling till device is verified using code
+ */
+
+app.get('/devicePol', function (req,res){  
+
+	var isSandbox = req.query.isSandbox;
+	var verification_uri = req.query.verification_uri;
+	var user_code = req.query.user_code;
+	var device_code = req.query.device_code;
+
+	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
+	if(isSandbox == 'true'){
+		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
+	}
+	
+	var computedURL = sfdcURL+
+	'?client_id='+ jwt_consumer_key+
+	 '&grant_type=device'+
+	 '&code='+device_code ;
+
+	 request({ 	url : computedURL,  
+			method:'POST' 
+		},
+		function(err, remoteResponse, remoteBody) {
+			if (err) { 
+				return res.status(500).end('Error'); 
+			}
+			console.log(remoteBody) ;
+			var sfdcResponse = JSON.parse(remoteBody); 
+
+			if(sfdcResponse.access_token){ 
+				res.writeHead(302, {
+					'Location': 'Main' ,
+					'Set-Cookie': ['AccToken='+sfdcResponse.access_token,'APIVer='+apiVersion,'InstURL='+sfdcResponse.instance_url,'idURL='+sfdcResponse.id]
+				  });
+				  res.end();
+			} else{
+				res.render('deviceOAuth',{
+					verification_uri :  verification_uri,
+					user_code :  user_code,
+					device_code :  device_code,
+					isSandbox : isSandbox
+				});
+			}
+		} 
+	);  
+} ); 
+
  
 
 function getJWTSignedToken_nJWTLib(sfdcUserName){ 
@@ -159,8 +285,7 @@ function encryptUsingPrivateKey_nJWTLib (claims) {
 	var jwt_token_b64 = jwt_token.compact();
 	console.log(jwt_token_b64);
  
-	return jwt_token_b64;    
-    //return base64url.encode(token);   
+	return jwt_token_b64;     
 };
  
  

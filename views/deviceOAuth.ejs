@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Device OAuth Flow</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/custom.css" rel="stylesheet">
+	<link rel="icon" type="image/icon" href="Cloud Red.ico" />
+</head>
+<body  class="container" style="padding-top: 50px;">
+    <div class="jumbotron">
+            Enter code <h3><%= user_code %></h3> at   
+            <h3> <a href="<%= verification_uri %>"><%= verification_uri %></a>  </h3> to validate this device
+    </div>
+        
+    <script>
+        var device_code = '<%= device_code %>';
+        var user_code = '<%= user_code %>';
+        var verification_uri = '<%= verification_uri %>';
+        var isSandbox='<%= isSandbox %>';
+
+        window.setInterval(function(){ 
+            window.location = 'devicePol?device_code='+device_code+'&user_code='+user_code+'&verification_uri='+verification_uri+
+            '&isSandbox='+isSandbox;
+
+        }, 10*1000);
+         
+
+    </script>
+ 
+</body>
+</html>
