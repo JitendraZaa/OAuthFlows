@@ -23,7 +23,7 @@
     "atlassian-jwt": "^0.1.4",
     "base64-url": "^2.3.3",
     "body-parser": "~1.6.2",
-    "ejs": "^1.0.0",
+    "ejs": "^2.5.5",
     "express": "^4.17.1",
     "http": "~0.0.0",
     "morgan": "^1.9.1",
