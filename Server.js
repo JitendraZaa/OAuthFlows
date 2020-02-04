@@ -16,8 +16,11 @@ var express = require('express'),
 	jwt_aud = 'https://login.salesforce.com', 
 	callbackURL='https://localhost:8081/oauthcallback.html';
 
+	qrcode = require('qrcode-npm'),
+    decode = require('salesforce-signed-request'),
+	canvas_consumer_secret='CB61ED01EA3693777FA4E403D6B775FCD94A9971FBC89F25EA75383ACCCD9E69';
  
-	app.set('view engine', 'ejs');
+	app.set('view engine', 'ejs'); 
 
 app.use(express.static(__dirname + '/client')); 
  
@@ -26,6 +29,34 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
 app.set('port', process.env.PORT || 8080);
+
+app.post('/signedrequest', function(req, res) {
+    // You could save this information in the user session if needed
+    var signedRequest = decode(req.body.signed_request, canvas_consumer_secret),
+        context = signedRequest.context,
+        oauthToken = signedRequest.client.oauthToken,
+        instanceUrl = signedRequest.client.instanceUrl,
+
+        query = "SELECT Id, FirstName, LastName, Phone, Email FROM Contact WHERE Id = '" + context.environment.record.Id + "'",
+
+        contactRequest = {
+            url: instanceUrl + '/services/data/v29.0/query?q=' + query,
+            headers: {
+                'Authorization': 'OAuth ' + oauthToken
+            }
+        };
+
+    request(contactRequest, function(err, response, body) {
+        var qr = qrcode.qrcode(4, 'L'),
+            contact = JSON.parse(body).records[0],
+            text = 'MECARD:N:' + contact.LastName + ',' + contact.FirstName + ';TEL:' + contact.Phone + ';EMAIL:' + contact.Email + ';;';
+        qr.addData(text);
+        qr.make();
+        var imgTag = qr.createImgTag(4);
+        res.render('canvasSignedReq', {context: context, imgTag: imgTag});
+    });
+
+});
 
 /**
  *  Extract Access token from POST response and redirect to page Main
@@ -286,9 +317,9 @@ function encryptUsingPrivateKey_nJWTLib (claims) {
 	console.log(jwt_token_b64);
  
 	return jwt_token_b64;     
-};
- 
- 
+}; 
+
+
 app.get('/' ,  function(req,res) {
     res.sendfile('views/index.html');
 } ); 

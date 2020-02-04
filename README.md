@@ -24,3 +24,11 @@ Then run `npm start`, or `nodemon Server.js (if installed previously)` it will s
 
 ### Step 6
 Navigate to `https://localhost:8081/` in your browser and you would see option for all **3 Auth flow - JWT, User Agent and Web Server**.
+
+# Canvas Demo
+1. Create Connected App & Enable Canvas in setting
+2. Add `https://localhost:8081/` as callback URL and `https://sfdccanvasnodejs.herokuapp.com/signedrequest` as canvas URL
+3. Update policy of connected app to allow per approved users to login
+4. Add System admin as allowed profile in Connected App
+5. Add Canvas app in contact pagelayout
+6. Run Nodejs on local system. It should be available to view in Salesforce
