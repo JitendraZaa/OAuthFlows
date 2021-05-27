@@ -4,7 +4,8 @@
   "description": "Salesforce JWT OAuth Demo",
   "main": "Server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
   },
   "repository": {
     "type": "git",
@@ -22,18 +23,18 @@
   "dependencies": {
     "atlassian-jwt": "^0.1.4",
     "base64-url": "^2.3.3",
-    "body-parser": "~1.6.2",
+    "body-parser": "^1.19.0",
     "ejs": "^1.0.0",
     "express": "^4.17.1",
     "http": "~0.0.0",
-    "morgan": "^1.9.1",
-    "njwt": "^1.0.0",
+    "morgan": "^1.10.0",
+    "njwt": "^1.1.0",
     "path": "^0.12.7",
     "qrcode-npm": "0.0.3",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "salesforce-signed-request": "0.0.1"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "14.8.0"
   }
 }

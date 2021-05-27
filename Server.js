@@ -9,10 +9,10 @@ var express = require('express'),
 	fs = require('fs'),  
 	base64url = require('base64-url'), 
 	nJwt = require('njwt'),  
-	apiVersion = 'v38.0',
+	apiVersion = 'v51.0',
 	domainName='localhost:8081',
-	jwt_consumer_key = '3MVG9szVa2RxsqBYmpkiG1QgjELvD9Z0NRvySRZKne.sBmUyKr9jPLXXXaKWxAlFr3vvGGUGQskU3c.QPQyQuOel', 
-	consumer_secret='4390324792281178734',
+	jwt_consumer_key = '3MVG9SOw8KERNN0.3wkuxfmJzqFlYMaQ5lde3DhQrcgTnG3Y5WAc2e_d3L9hlWUS20aKLyF.1DFz.HoZbWaP9', 
+	consumer_secret='1DF1E5721AF6F7E45CABAA99CE0376DB9402B1EDB423056145278EBB5B715B9E',
 	jwt_aud = 'https://login.salesforce.com', 
 	callbackURL='https://localhost:8081/oauthcallback.html';
 
@@ -354,7 +354,7 @@ app.listen(app.get('port'), function () {
 
 var options = {
   key: fs.readFileSync('./key.pem', 'utf8'),
-  cert: fs.readFileSync('./server.crt', 'utf8')
+  cert: fs.readFileSync('./iberiaidlab.crt', 'utf8')
 };
 
 https.createServer(options, app).listen(8081);
