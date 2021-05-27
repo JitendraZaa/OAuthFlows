@@ -1,0 +1,8 @@
+{
+  "name": "iberiaidentitylabs-oauthflows",
+  "description": "Iberia Identity Labs - oAuth Flows",
+  "keywords": [
+    "app-cloud"
+  ],
+  "repository": "https://github.com/itovarba/OAuthFlows"
+}
