@@ -13,7 +13,7 @@ var express = require('express'),
 	domainName='localhost:8081',
 	jwt_consumer_key = '3MVG9SOw8KERNN0.3wkuxfmJzqFlYMaQ5lde3DhQrcgTnG3Y5WAc2e_d3L9hlWUS20aKLyF.1DFz.HoZbWaP9', 
 	consumer_secret='1DF1E5721AF6F7E45CABAA99CE0376DB9402B1EDB423056145278EBB5B715B9E',
-	jwt_aud = 'https://login.salesforce.com', 
+	jwt_aud = 'https://iberiaidentitylabs.force.com/customers', 
 	callbackURL='https://localhost:8081/oauthcallback.html';
 
 	qrcode = require('qrcode-npm'),
@@ -102,7 +102,7 @@ app.all('/proxy',  function(req, res) {
 
 app.get('/jwt', function (req,res){  
 	var isSandbox = req.query.isSandbox;
-	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
+	var sfdcURL = 'https://iberiaidentitylabs.force.com/customers/services/oauth2/token' ;
 	if(isSandbox == 'true'){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
 	}
@@ -129,7 +129,7 @@ app.get('/jwt', function (req,res){
 app.get('/webServer', function (req,res){  
 	var isSandbox = req.query.isSandbox;
 	var state = 'webServerProd';
-	var sfdcURL = 'https://login.salesforce.com/services/oauth2/authorize' ;
+	var sfdcURL = 'https://iberiaidentitylabs.force.com/customers/services/oauth2/authorize' ;
 	if(isSandbox == 'true'){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/authorize' ;
 		state = 'webServerSandbox';
@@ -150,7 +150,7 @@ app.get('/webServer', function (req,res){
  */
 app.get('/webServerStep2', function (req,res){  
 	var state = req.query.state;
-	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
+	var sfdcURL = 'https://iberiaidentitylabs.force.com/customers/services/oauth2/token' ;
 	if(state == 'webServerSandbox'){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
 	}
@@ -174,7 +174,7 @@ app.get('/webServerStep2', function (req,res){
 */
 app.get('/uAgent', function (req,res){  
 	var isSandbox = req.query.isSandbox;
-	var sfdcURL = 'https://login.salesforce.com/services/oauth2/authorize' ;
+	var sfdcURL = 'https://iberiaidentitylabs.force.com/customers/services/oauth2/authorize' ;
 	if(isSandbox == 'true'){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/authorize' ;
 	}
@@ -195,7 +195,7 @@ app.post('/uPwd', function (req,res){
 	var pwd = req.body.sfdcPassword; 
 
 	var state = req.query.state;
-	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
+	var sfdcURL = 'https://iberiaidentitylabs.force.com/customers/services/oauth2/token' ;
 	if(instance == 'sand'){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
 	}
@@ -223,7 +223,7 @@ app.post('/uPwd', function (req,res){
 app.get('/device', function (req,res){  
 
 	var isSandbox = req.query.isSandbox;
-	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
+	var sfdcURL = 'https://iberiaidentitylabs.force.com/customers/services/oauth2/token' ;
 	if(isSandbox == 'true'){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
 	}
@@ -269,7 +269,7 @@ app.get('/devicePol', function (req,res){
 	var user_code = req.query.user_code;
 	var device_code = req.query.device_code;
 
-	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
+	var sfdcURL = 'https://iberiaidentitylabs.force.com/customers/services/oauth2/token' ;
 	if(isSandbox == 'true'){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
 	}
