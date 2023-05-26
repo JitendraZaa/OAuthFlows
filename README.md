@@ -25,6 +25,11 @@ Then run `npm start`, or `nodemon Server.js (if installed previously)` it will s
 ### Step 6
 Navigate to `https://localhost:8081/` in your browser and you would see option for all **3 Auth flow - JWT, User Agent and Web Server**.
 
+# Considerations
+
+## Client Credential Flow
+1. CC Flow on API only User
+1. It only accepts My Domain URL
 # Canvas Demo
 1. Create Connected App & Enable Canvas in setting
 2. Add `https://localhost:8081/` as callback URL and `https://sfdccanvasnodejs.herokuapp.com/signedrequest` as canvas URL
