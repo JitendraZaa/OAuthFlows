@@ -128,6 +128,7 @@ app.get('/jwt', function (req,res){
 
 /**
  * Step 1 Web Server Flow - Get Code
+ * code_challenge and code_verifier are used for PKCE
  */
 app.get('/webServer', function (req,res){  
 	var isSandbox = req.query.isSandbox;
