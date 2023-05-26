@@ -11,8 +11,8 @@ var express = require('express'),
 	nJwt = require('njwt'),  
 	apiVersion = 'v38.0',
 	domainName='localhost:8081',
-	jwt_consumer_key = '3MVG9szVa2RxsqBYmpkiG1QgjELvD9Z0NRvySRZKne.sBmUyKr9jPLXXXaKWxAlFr3vvGGUGQskU3c.QPQyQuOel', 
-	consumer_secret='4390324792281178734',
+	jwt_consumer_key = '3MVG9n_HvETGhr3D_K58a1146EmiqvI3U03IuPq8_LUpKFOviLMNYkEDOFiQjLNKsmKNWSbY9veI1gXrR0Eaa', 
+	consumer_secret='76E4EA0EB22E0B673B3781B3E64AAF0C7D97885D735C631D9BACFA6A4B2E83B5',
 	jwt_aud = 'https://login.salesforce.com', 
 	callbackURL='https://localhost:8081/oauthcallback.html';
 
@@ -77,8 +77,11 @@ function extractAccessToken(err, remoteResponse, remoteBody,res){
 	if (err) { 
 		return res.status(500).end('Error'); 
 	}
+	console.log('remotebody');
 	console.log(remoteBody) ;
 	var sfdcResponse = JSON.parse(remoteBody); 
+	console.log('sfdcResponse');
+	console.log(sfdcResponse) ;
 	
 	//success
 	if(sfdcResponse.access_token){				 
@@ -186,6 +189,30 @@ app.get('/uAgent', function (req,res){
 } );
 
 /**
+*	 Client Credentials Flow - By Sneha Kashyap
+*/
+app.get('/ccf', function (req,res){  
+	
+	var isSandbox = req.query.isSandbox;
+	var myDomainUrl = req.query.myDomainUrl;
+	var sfdcURL = myDomainUrl+'/services/oauth2/token' ;
+	if(isSandbox == 'true'){
+		sfdcURL = myDomainUrl+'/services/oauth2/token' ;
+	}
+	
+	 request({ 		url : sfdcURL+'?grant_type=client_credentials'
+	 				+'&client_id='+jwt_consumer_key+
+					'&client_secret='+consumer_secret,  
+					method:'POST' 
+			},
+			function(err, remoteResponse, remoteBody) {
+				extractAccessToken(err, remoteResponse, remoteBody, res); 
+			}
+			); 
+	 
+} );
+
+/**
 *	 Username Password oAuth Flow
 */
 app.post('/uPwd', function (req,res){  
@@ -206,7 +233,8 @@ app.post('/uPwd', function (req,res){
 	 '&client_secret='+consumer_secret+
 	 '&username='+uname+
 	 '&password='+pwd ;
- 
+    console.log('computedURL ');
+	console.log(computedURL);
 
 	 request({ 	url : computedURL,  
 				method:'POST' 

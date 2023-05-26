@@ -24,15 +24,20 @@
 					<li>
 						<a href="#webServer"> Web Server </a>
 					</li>
+
 					<li>
 						<a href="#jwt"> JWT </a>
 					</li>
 					<li>
 						<a href="#usernamePassword"> Username Password</a>
 					</li>
+					<li>
+						<a href="#clientcredentials"> Client Credentials Flow </a>
+					</li>
 					<li><a href="#deviceFlow"> Device Authentication Flow </a></li>
 					<li><a href="#refreshToken">Refresh Token</a></li>
 					<li><a href="#samlAssertion"> SAML Assertion </a></li>
+					
 				</ul>
 			</div>
 
@@ -106,6 +111,7 @@
 		</p>
 	</div>
 
+	
 
 	<div class="jumbotron" id="jwt">
 		<p>
@@ -165,7 +171,23 @@
 			</form>
 		</p>  
 	</div>
-
+	<div class="jumbotron" id="clientcredentials">
+		<p>
+			<h2>Client Credentials Flow </h2>
+			<ol class="smallFont">
+				<li> Make sure Client Credentials flow is enabled in the Connected App</li>
+				<li> Ensure the connected app has an API Only user or Integration User selected as Run As user for Client Credentials Flow </li> 
+				<li> Also add the API user profile to pre approved user list</li> 
+			</ol>
+			<div class="smallFont">
+				<label for="myDomainUrl">Salesforce My Domain URL  - Copy from My Domain in Quick Find and prepend https://</label>
+				<input class="form-control" id="myDomainUrl" type="text" value="https://my.salesforce.com" />
+			</div>
+			
+		</p>
+		<a id="prodBtnCCF" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
+		<a id="sandBtnCCF" role="button" class="btn btn-primary btn-lg">Sandbox</a>
+</div>
 	<div class="jumbotron" id="deviceFlow">
 			<p>
 				<h2> Device Authentication Flow</h2>
@@ -187,6 +209,7 @@
 				<a id="sandBtnDvc" role="button" class="btn btn-primary btn-lg">Sandbox</a>
 			</p>
 		</div>
+		
 
 	<div class="jumbotron" id="refreshToken">
 		<p>
@@ -202,7 +225,7 @@
 				<p><i><b> To be Implemented </b>	</i></p>   
 			</p>
 		</div>
-
+	
 
 	<script type="text/javascript" src="lib/jquery.js"></script>
 	<script type="text/javascript" src="lib/jqueryCookies.js"> </script>
@@ -230,6 +253,13 @@
 		});
 		$("#sandBtnDvc").click(function () {
 			window.location = 'device?isSandbox=true';
+		});
+
+		$("#prodBtnCCF").click(function () {
+			window.location = 'ccf?isSandbox=false&myDomainUrl='+ $("#myDomainUrl").val();
+		});
+		$("#sandBtnCCF").click(function () {
+			window.location = 'ccf?isSandbox=true&myDomainUrl='+ $("#myDomainUrl").val();
 		});
 
 		$("#prodBtnWS").click(function () {
