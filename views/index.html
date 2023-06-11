@@ -211,13 +211,19 @@
 		</div>
 		
 
-	<div class="jumbotron" id="refreshToken">
-		<p>
-			<h2>Refresh Token Flow</h2>
-			<p><i><b> To be Implemented </b>	</i></p>
-			Refresh Token flow can only be implemented for OAuth which asks users confirmation to validate connected app like Web Server flow and User Agent Flow 
-		</p>
-	</div>
+		<div class="jumbotron" id="refreshToken">
+			<p>
+				<h2>Refresh Token Flow OAuth 2.0</h2>
+				<ol class="smallFont">
+					<li> Refresh Token flow can only be implemented for OAuth flows with user interaction like Web Server flow and User Agent Flow</li>
+					<li> Flows like JWT and SAML Bearer don't provide a refresh token even if specified in the scope of the Connected App. </li> 
+				</ol>
+			</p>
+			<p>
+				<a id="prodBtnRefresh" role="button" style="margin-right:40px" class="btn btn-primary btn-lg">Production</a>
+				<a id="sandBtnRefresh" role="button" class="btn btn-primary btn-lg">Sandbox</a>
+			</p>
+		</div>
 
 	<div class="jumbotron" id="samlAssertion">
 			<p>
@@ -267,6 +273,13 @@
 		});
 		$("#sandBtnWS").click(function () {
 			window.location = 'webServer?isSandbox=true';
+		});
+
+		$("#prodBtnRefresh").click(function () {
+			window.location = 'refresh-token?isSandbox=false';
+		});
+		$("#sandBtnRefresh").click(function () {
+			window.location = 'refresh-token?isSandbox=true';
 		});
 
 		$("#prodBtnR").click(function () {

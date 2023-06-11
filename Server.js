@@ -9,10 +9,10 @@ var express = require('express'),
 	fs = require('fs'),  
 	base64url = require('base64-url'), 
 	nJwt = require('njwt'),  
-	apiVersion = 'v38.0',
+	apiVersion = 'v57.0',
 	domainName='localhost:8081',
-	jwt_consumer_key = '3MVG9n_HvETGhr3D_K58a1146EmiqvI3U03IuPq8_LUpKFOviLMNYkEDOFiQjLNKsmKNWSbY9veI1gXrR0Eaa', 
-	consumer_secret='76E4EA0EB22E0B673B3781B3E64AAF0C7D97885D735C631D9BACFA6A4B2E83B5',
+	//jwt_consumer_key = '3MVG9n_HvETGhr3D_K58a1146EmiqvI3U03IuPq8_LUpKFOviLMNYkEDOFiQjLNKsmKNWSbY9veI1gXrR0Eaa', 
+	//consumer_secret='76E4EA0EB22E0B673B3781B3E64AAF0C7D97885D735C631D9BACFA6A4B2E83B5',
 	jwt_aud = 'https://login.salesforce.com', 
 	callbackURL='https://localhost:8081/oauthcallback.html';
 
@@ -22,6 +22,7 @@ var express = require('express'),
  
 	app.set('view engine', 'ejs'); 
 
+	refreshToken = 'ToBePopulated';
 app.use(express.static(__dirname + '/client')); 
  
 app.use(morgan('dev'));
@@ -94,6 +95,9 @@ function extractAccessToken(err, remoteResponse, remoteBody,res){
 		res.write(' Salesforce Response : ');
 		res.write( remoteBody ); 
 	} 
+	if(sfdcResponse.refresh_token) {
+		refreshToken = sfdcResponse.refresh_token;
+	}
 	res.end();
 }
 
@@ -123,7 +127,7 @@ app.get('/jwt', function (req,res){
 		function(err, remoteResponse, remoteBody) {
 			extractAccessToken(err, remoteResponse, remoteBody, res); 
 		} 
-	); 
+	);
 } );
 
 /**
@@ -138,6 +142,10 @@ app.get('/webServer', function (req,res){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/authorize' ;
 		state = 'webServerSandbox';
 	}
+
+	console.log('Sending GET request: '+ sfdcURL+'?client_id='+
+			jwt_consumer_key+'&redirect_uri='+
+			callbackURL+'&response_type=code&state='+state);
 	
 	 request({ 	url : sfdcURL+'?client_id='+
 				 jwt_consumer_key+'&redirect_uri='+
@@ -154,15 +162,21 @@ app.get('/webServer', function (req,res){
  */
 app.get('/webServerStep2', function (req,res){  
 	var state = req.query.state;
+	console.debug(req.query.code);
 	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
 	if(state == 'webServerSandbox'){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
 	}
-	
-	 request({ 	url : sfdcURL+'?client_id='+
-				 jwt_consumer_key+'&redirect_uri='+
-				 callbackURL+'&grant_type=authorization_code&code='+
-				 req.query.code+'&client_secret'+consumer_secret,  
+	console.log('Sending POST request: '+ sfdcURL+
+		'?client_id='+jwt_consumer_key+
+		'&redirect_uri='+callbackURL+
+		'&grant_type=authorization_code&code='+req.query.code+
+		'&client_secret='+consumer_secret);
+	 request({ 	url : sfdcURL+
+				'?client_id='+jwt_consumer_key+
+				'&redirect_uri='+callbackURL+
+				'&grant_type=authorization_code&code='+req.query.code+
+				'&client_secret='+consumer_secret,  
 				method:'POST' 
 			},
 			function(err, remoteResponse, remoteBody) {
@@ -177,15 +191,24 @@ app.get('/webServerStep2', function (req,res){
 *	 User Agent oAuth Flow
 */
 app.get('/uAgent', function (req,res){  
+	console.log('Starting User Agent flow...');
 	var isSandbox = req.query.isSandbox;
 	var sfdcURL = 'https://login.salesforce.com/services/oauth2/authorize' ;
 	if(isSandbox == 'true'){
 		sfdcURL = 'https://test.salesforce.com/services/oauth2/authorize' ;
 	}
-	
-	 request({ 	url : sfdcURL+'?client_id='+jwt_consumer_key+'&redirect_uri='+callbackURL+'&response_type=token',  
+
+	  console.log('Sending GET request: '+ sfdcURL+
+	  									'?client_id='+jwt_consumer_key+
+	  									'&redirect_uri='+callbackURL+
+	  									'&response_type=token');
+
+	request({ 	url : sfdcURL+
+		'?client_id='+jwt_consumer_key+
+		'&redirect_uri='+callbackURL+
+		'&response_type=token',  
 				method:'GET' 
-			}).pipe(res); 
+			}).pipe(res) ;
 	 
 } );
 
@@ -336,7 +359,38 @@ app.get('/devicePol', function (req,res){
 	);  
 } ); 
 
- 
+ /**
+ * Refresh Token Flow. Gets launched when navigating to '/refresh-token'.
+ * Requires another flow to be run that provided a refresh token, previous to launching this flow.
+ * Sends the refresh token to the token endpoint.
+ */
+app.get('/refresh-token', function (req, res) {
+    // Instantiate Username-Password service and generate post request
+    var isSandbox = req.query.isSandbox;
+	var sfdcURL = 'https://login.salesforce.com/services/oauth2/token' ;
+	if(isSandbox == 'true'){
+		sfdcURL = 'https://test.salesforce.com/services/oauth2/token' ;
+	}
+	const grantType = 'refresh_token';
+    let paramBody =
+            'grant_type=' + base64url.escape(grantType) +
+            '&refresh_token=' +refreshToken +
+            '&client_id=' +jwt_consumer_key;
+
+	var computedURL = sfdcURL;
+	console.log('computedURL ');
+	console.log(computedURL);
+		
+	request({ 	url : computedURL,
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: paramBody,  
+		method:'POST' 
+					},
+					function(err, remoteResponse, remoteBody) {
+						extractAccessToken(err, remoteResponse, remoteBody, res); 
+					} 
+				);  
+});
 
 function getJWTSignedToken_nJWTLib(sfdcUserName){ 
 	var claims = {
